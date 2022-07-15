@@ -1,6 +1,5 @@
 package com.mardrex.reto.routers;
 
-import com.mardrex.reto.collections.Team;
 import com.mardrex.reto.models.TeamDTO;
 import com.mardrex.reto.usecases.*;
 import io.swagger.v3.oas.annotations.Operation;
@@ -11,7 +10,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springdoc.core.annotations.RouterOperation;
 import org.springdoc.core.annotations.RouterOperations;
-import org.springframework.boot.autoconfigure.cassandra.CassandraProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
@@ -89,7 +87,7 @@ public class TeamRouter {
                 );
         return route(
                 POST("/team/create").and(accept(MediaType.APPLICATION_JSON)),
-        request -> request.bodyToMono(TeamDTO.class)
+                request -> request.bodyToMono(TeamDTO.class)
                         .flatMap(executor)
         );
     }
@@ -110,7 +108,7 @@ public class TeamRouter {
                                                     content = @Content(schema = @Schema(implementation = TeamDTO.class))),
                                             @ApiResponse(responseCode = "400", description = "Invalid"),
                                             @ApiResponse(responseCode = "404", description = "Not found")},
-                                    parameters = {@Parameter(in =  ParameterIn.PATH, name = "id")}
+                                    parameters = {@Parameter(in = ParameterIn.PATH, name = "id")}
 
 
                             )
@@ -142,18 +140,18 @@ public class TeamRouter {
                                                     content = @Content(schema = @Schema(implementation = TeamDTO.class))),
                                             @ApiResponse(responseCode = "400", description = "Invalid"),
                                             @ApiResponse(responseCode = "404", description = "Not found")},
-                                    parameters = {@Parameter(in =  ParameterIn.PATH, name = "id")}
-                    )
+                                    parameters = {@Parameter(in = ParameterIn.PATH, name = "id")}
+                            )
                     )
             }
     )
-                public RouterFunction<ServerResponse> deleteTeam(DeleteTeamUseCase deleteTeamUseCase) {
-                        return route(
-                                DELETE("/team/delete/{id}").and(accept(MediaType.APPLICATION_JSON)),
-                                request -> ServerResponse.accepted()
-                                        .contentType(MediaType.APPLICATION_JSON)
-                                        .body(BodyInserters.fromPublisher(deleteTeamUseCase.apply(request.pathVariable("id")), Void.class))
-                        );
+    public RouterFunction<ServerResponse> deleteTeam(DeleteTeamUseCase deleteTeamUseCase) {
+        return route(
+                DELETE("/team/delete/{id}").and(accept(MediaType.APPLICATION_JSON)),
+                request -> ServerResponse.accepted()
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body(BodyInserters.fromPublisher(deleteTeamUseCase.apply(request.pathVariable("id")), Void.class))
+        );
     }
 
     @Bean
@@ -172,8 +170,8 @@ public class TeamRouter {
                                                     content = @Content(schema = @Schema(implementation = TeamDTO.class))),
                                             @ApiResponse(responseCode = "400", description = "Invalid"),
                                             @ApiResponse(responseCode = "404", description = "Not found")},
-                                    parameters = {@Parameter(in =  ParameterIn.PATH, name = "id")}
-                    )
+                                    parameters = {@Parameter(in = ParameterIn.PATH, name = "id")}
+                            )
                     )
             }
     )
@@ -187,8 +185,41 @@ public class TeamRouter {
 
         return route(
                 PUT("/team/update").and(accept(MediaType.APPLICATION_JSON)),
-                request ->  request.bodyToMono(TeamDTO.class)
+                request -> request.bodyToMono(TeamDTO.class)
                         .flatMap(executor)
         );
     }
+
+    @Bean
+    @RouterOperations(
+            {
+                    @RouterOperation(
+                            path = "/team/findByCountry/{country}",
+                            produces = {MediaType.APPLICATION_JSON_VALUE},
+                            method = RequestMethod.GET,
+                            beanClass = GetTeamsByCountryUseCase.class,
+                            beanMethod = "apply",
+                            operation = @Operation(
+                                    operationId = "findByCountry",
+                                    responses = {
+                                            @ApiResponse(responseCode = "200", description = "successful operation",
+                                                    content = @Content(schema = @Schema(implementation = TeamDTO.class))),
+                                            @ApiResponse(responseCode = "400", description = "Invalid"),
+                                            @ApiResponse(responseCode = "404", description = "Not found")},
+                                    parameters = {@Parameter(in = ParameterIn.PATH, name = "id")}
+
+
+                            )
+                    )
+            }
+    )
+    public RouterFunction<ServerResponse> findTeamsByCountry(GetTeamsByCountryUseCase getTeamsByCountryUseCase) {
+        return route(
+                GET("/team/findByCountry/{country}").and(accept(MediaType.APPLICATION_JSON)),
+                request -> ServerResponse.ok()
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body(BodyInserters.fromPublisher(getTeamsByCountryUseCase.apply(request.pathVariable("country")), TeamDTO.class))
+        );
+    }
+
 }

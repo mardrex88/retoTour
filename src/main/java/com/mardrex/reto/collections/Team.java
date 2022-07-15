@@ -7,6 +7,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.validation.constraints.Size;
+
 
 @Document(collection = "teams")
 @Getter
@@ -17,9 +19,11 @@ public class Team {
     @Id
     private String id;
 
-    @Indexed(unique=true)
+    @Indexed(unique = true)
     private String name;
-    @Indexed(unique=true)
+
+    @Indexed(unique = true)
+    @Size(min = 3, max = 3)
     private String code;
     private String country;
 

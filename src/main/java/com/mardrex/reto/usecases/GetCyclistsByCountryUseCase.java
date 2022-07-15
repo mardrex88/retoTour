@@ -7,23 +7,22 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import reactor.core.publisher.Flux;
 
-
 @Service
 @Validated
-public class ListCyclistUseCase {
+public class GetCyclistsByCountryUseCase {
 
     private final CyclistRepository cyclistRepository;
     private final MapperUtilsCyclist mapperUtilsCyclist;
 
-
-    public ListCyclistUseCase(CyclistRepository cyclistRepository, MapperUtilsCyclist mapperUtilsCyclist) {
+    public GetCyclistsByCountryUseCase(CyclistRepository cyclistRepository, MapperUtilsCyclist mapperUtilsCyclist) {
         this.cyclistRepository = cyclistRepository;
         this.mapperUtilsCyclist = mapperUtilsCyclist;
+
     }
 
-    public Flux<CyclistDTO> get() {
-        return cyclistRepository.findAll()
+    public Flux<CyclistDTO> apply(String country) {
+        return cyclistRepository.findByCountry(country)
                 .map(mapperUtilsCyclist::mapperToCyclistDTO);
-    }
 
+    }
 }

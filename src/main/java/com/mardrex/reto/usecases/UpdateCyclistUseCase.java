@@ -25,7 +25,7 @@ public class UpdateCyclistUseCase {
 
     }
 
-    public Mono<String> apply( CyclistDTO cyclistDTO) {
+    public Mono<String> apply(CyclistDTO cyclistDTO) {
         Objects.requireNonNull(cyclistDTO.getId(), "TeamDto is required");
         return cyclistRepository.findById(cyclistDTO.getId())
                 .map(team -> mapperUtilsCyclist.mapperToCyclist(cyclistDTO))

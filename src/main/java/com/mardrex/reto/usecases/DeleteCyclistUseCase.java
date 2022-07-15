@@ -1,4 +1,5 @@
 package com.mardrex.reto.usecases;
+
 import com.mardrex.reto.repositories.CyclistRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;

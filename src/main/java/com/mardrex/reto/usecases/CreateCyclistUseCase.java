@@ -7,6 +7,7 @@ import com.mardrex.reto.usecases.utils.MapperUtilsCyclist;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import reactor.core.publisher.Mono;
+
 import javax.validation.Valid;
 
 
@@ -25,16 +26,16 @@ public class CreateCyclistUseCase {
 
     public Mono<String> apply(@Valid CyclistDTO cyclistDTO) {
 
-          return cyclistRepository.getCountByTeamName(cyclistDTO.getTeam().getName())
-                   .count()
-                   .flatMap(count -> {
-                        if (count > 7) {
-                            return Mono.error(new IllegalArgumentException("El aquipo ya tiene 8 ciclistas"));
-                        } else {
-                            return cyclistRepository.save(mapperUtilsCyclist.mapperToCyclist(cyclistDTO));
-                        }
-                    })
-                    .map(Cyclist::getId);
+        return cyclistRepository.getCountByTeamName(cyclistDTO.getTeam().getName())
+                .count()
+                .flatMap(count -> {
+                    if (count > 7) {
+                        return Mono.error(new IllegalArgumentException("El aquipo ya tiene 8 ciclistas"));
+                    } else {
+                        return cyclistRepository.save(mapperUtilsCyclist.mapperToCyclist(cyclistDTO));
+                    }
+                })
+                .map(Cyclist::getId);
     }
 
 

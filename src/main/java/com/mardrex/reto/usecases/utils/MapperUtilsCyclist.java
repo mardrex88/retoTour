@@ -9,20 +9,22 @@ import org.springframework.stereotype.Component;
 @Component
 public class MapperUtilsCyclist {
 
-    public CyclistDTO mapperToCyclistDTO (Cyclist cyclist) {
+    public CyclistDTO mapperToCyclistDTO(Cyclist cyclist) {
         return CyclistDTO.builder()
                 .id(cyclist.getId())
                 .name(cyclist.getName())
                 .numberId(cyclist.getNumberId())
+                .country(cyclist.getCountry())
                 .team(getTeamDTO(cyclist.getTeam()))
                 .build();
     }
 
-    public Cyclist mapperToCyclist (CyclistDTO cyclistDTO) {
+    public Cyclist mapperToCyclist(CyclistDTO cyclistDTO) {
         return Cyclist.builder()
                 .id(cyclistDTO.getId())
                 .name(cyclistDTO.getName())
                 .numberId(cyclistDTO.getNumberId())
+                .country(cyclistDTO.getCountry())
                 .team(getTeam(cyclistDTO.getTeam()))
                 .build();
     }

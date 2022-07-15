@@ -2,9 +2,10 @@ package com.mardrex.reto.routers;
 
 
 import com.mardrex.reto.models.CyclistDTO;
-
 import com.mardrex.reto.usecases.*;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -156,6 +157,107 @@ public class CyclistRouter {
                 request -> ServerResponse.ok()
                         .contentType(MediaType.APPLICATION_JSON)
                         .body(BodyInserters.fromPublisher(deleteCyclistUseCase.apply(request.pathVariable("id")), Void.class))
+        );
+    }
+
+    @Bean
+    @RouterOperations(
+            {
+                    @RouterOperation(
+                            path = "/cyclist/update/{id}",
+                            produces = {MediaType.APPLICATION_JSON_VALUE},
+                            method = RequestMethod.PUT,
+                            beanClass = UpdateCyclistUseCase.class,
+                            beanMethod = "apply",
+                            operation = @Operation(
+                                    operationId = "updateCyclist",
+                                    responses = {
+                                            @ApiResponse(responseCode = "200", description = "successful operation",
+                                                    content = @Content(schema = @Schema(implementation = CyclistDTO.class))),
+                                            @ApiResponse(responseCode = "400", description = "Invalid"),
+                                            @ApiResponse(responseCode = "404", description = "Not found")},
+                                    parameters = {@Parameter(in = ParameterIn.PATH, name = "id")}
+                            )
+                    )
+            }
+    )
+
+    public RouterFunction<ServerResponse> updateCyclist(UpdateCyclistUseCase updateCyclistUseCase) {
+        Function<CyclistDTO, Mono<ServerResponse>> executor = cyclistDTO -> updateCyclistUseCase.apply(cyclistDTO)
+                .flatMap(result -> ServerResponse.ok()
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body(BodyInserters.fromPublisher(Mono.just(result), String.class))
+                );
+
+        return route(
+                PUT("/cyclist/update").and(accept(MediaType.APPLICATION_JSON)),
+                request -> request.bodyToMono(CyclistDTO.class)
+                        .flatMap(executor)
+        );
+    }
+
+
+    @Bean
+    @RouterOperations(
+            {
+                    @RouterOperation(
+                            path = "/cyclist/getByTeamCode/{code}",
+                            produces = {MediaType.APPLICATION_JSON_VALUE},
+                            method = RequestMethod.GET,
+                            beanClass = GetCyclistsByCodeTeamUseCase.class,
+                            beanMethod = "apply",
+                            operation = @Operation(
+                                    operationId = "getCyclistByTeamCode",
+                                    responses = {
+                                            @ApiResponse(responseCode = "200", description = "successful operation",
+                                                    content = @Content(schema = @Schema(implementation = CyclistDTO.class))),
+                                            @ApiResponse(responseCode = "400", description = "Invalid"),
+                                            @ApiResponse(responseCode = "404", description = "Not found")
+                                    }
+                            )
+                    )
+            }
+    )
+
+    public RouterFunction<ServerResponse> getCyclistsByTeamCode(GetCyclistsByCodeTeamUseCase getCyclistsByCodeTeamUseCase) {
+
+        return route(
+                GET("/cyclist/getByTeamCode/{code}").and(accept(MediaType.APPLICATION_JSON)),
+                request -> ServerResponse.ok()
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body(BodyInserters.fromPublisher(getCyclistsByCodeTeamUseCase.apply(request.pathVariable("code")), CyclistDTO.class))
+        );
+    }
+
+    @Bean
+    @RouterOperations(
+            {
+                    @RouterOperation(
+                            path = "/cyclist/findByCountry/{country}",
+                            produces = {MediaType.APPLICATION_JSON_VALUE},
+                            method = RequestMethod.GET,
+                            beanClass = GetCyclistsByCountryUseCase.class,
+                            beanMethod = "apply",
+                            operation = @Operation(
+                                    operationId = "findByCountry",
+                                    responses = {
+                                            @ApiResponse(responseCode = "200", description = "successful operation",
+                                                    content = @Content(schema = @Schema(implementation = CyclistDTO.class))),
+                                            @ApiResponse(responseCode = "400", description = "Invalid"),
+                                            @ApiResponse(responseCode = "404", description = "Not found")},
+                                    parameters = {@Parameter(in = ParameterIn.PATH, name = "id")}
+
+
+                            )
+                    )
+            }
+    )
+    public RouterFunction<ServerResponse> findCyclistsByCountry(GetCyclistsByCountryUseCase getCyclistsByCountryUseCase) {
+        return route(
+                GET("/cyclist/findByCountry/{country}").and(accept(MediaType.APPLICATION_JSON)),
+                request -> ServerResponse.ok()
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body(BodyInserters.fromPublisher(getCyclistsByCountryUseCase.apply(request.pathVariable("country")), CyclistDTO.class))
         );
     }
 }

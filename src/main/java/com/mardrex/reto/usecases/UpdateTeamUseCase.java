@@ -24,7 +24,7 @@ public class UpdateTeamUseCase {
         this.mapperUtilsTeam = mapperUtilsTeam;
     }
 
-    public Mono<String> apply( TeamDTO teamDto) {
+    public Mono<String> apply(TeamDTO teamDto) {
         Objects.requireNonNull(teamDto.getId(), "TeamDto is required");
         return teamRepository.findById(teamDto.getId())
                 .map(team -> mapperUtilsTeam.mapperToTeam(teamDto))

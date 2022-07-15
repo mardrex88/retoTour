@@ -16,8 +16,9 @@ public class DeleteTeamUseCase {
     public DeleteTeamUseCase(TeamRepository teamRepository) {
         this.teamRepository = teamRepository;
     }
-     public Mono<Void> apply(String id) {
-         Objects.requireNonNull(id, "Id is required");
-         return teamRepository.deleteById(id);
-     }
+
+    public Mono<Void> apply(String id) {
+        Objects.requireNonNull(id, "Id is required");
+        return teamRepository.deleteById(id);
+    }
 }

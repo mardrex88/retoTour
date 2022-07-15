@@ -28,6 +28,5 @@ public class GetCyclistUseCase {
         return cyclistRepository.findById(id)
                 .switchIfEmpty(fallBack)
                 .map(mapperUtilsCyclist::mapperToCyclistDTO);
-               // .onErrorResume(error -> Mono.error(new IllegalArgumentException("No se encontro el Cyclist con el Id: " + id)));
     }
 }
