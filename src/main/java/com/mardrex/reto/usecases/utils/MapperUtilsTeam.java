@@ -1,4 +1,4 @@
-package com.mardrex.reto.usecases;
+package com.mardrex.reto.usecases.utils;
 
 import com.mardrex.reto.collections.Team;
 import com.mardrex.reto.models.TeamDTO;

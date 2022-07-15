@@ -3,11 +3,11 @@ package com.mardrex.reto.usecases;
 import com.mardrex.reto.collections.Cyclist;
 import com.mardrex.reto.models.CyclistDTO;
 import com.mardrex.reto.repositories.CyclistRepository;
+import com.mardrex.reto.usecases.utils.MapperUtilsCyclist;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import reactor.core.publisher.Mono;
 import javax.validation.Valid;
-import java.util.Collections;
 
 
 @Service

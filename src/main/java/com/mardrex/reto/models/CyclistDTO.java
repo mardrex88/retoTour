@@ -10,6 +10,7 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -23,7 +24,6 @@ public class CyclistDTO {
     private Integer numberId;
 
     @JsonProperty("team")
-    @NotNull(message = "Equipo es requerido")
     private TeamDTO team;
     @NotBlank(message = "Pais es requerido")
     private String country;
@@ -38,7 +38,6 @@ public class CyclistDTO {
         this.team = team;
         this.country = country;
     }
-
 
     @Override
     public String toString() {
