@@ -19,10 +19,8 @@ public class Team {
 
     @Indexed(unique=true)
     private String name;
-
     @Indexed(unique=true)
     private String code;
-
     private String country;
 
 }

@@ -1,17 +1,29 @@
 package com.mardrex.reto.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mardrex.reto.collections.Team;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.data.mongodb.core.index.Indexed;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
+@Getter
+@Setter
+@Builder(toBuilder = true)
 public class CyclistDTO {
 
     private String id;
     @NotBlank(message = "Nombre es requerido")
     private String name;
-    @NotBlank(message = "Numero de Identificacion es requerido")
+
     private Integer numberId;
-    @NotBlank(message = "Equipo es requerido")
+
+    @JsonProperty("team")
+    @NotNull(message = "Equipo es requerido")
     private TeamDTO team;
     @NotBlank(message = "Pais es requerido")
     private String country;
@@ -26,6 +38,7 @@ public class CyclistDTO {
         this.team = team;
         this.country = country;
     }
+
 
     @Override
     public String toString() {

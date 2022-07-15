@@ -20,6 +20,7 @@ public class MapperUtilsTeam {
     public Team mapperToTeam(TeamDTO teamDTO) {
 
         return Team.builder()
+                .id(teamDTO.getId())
                 .name(teamDTO.getName())
                 .code(teamDTO.getCode())
                 .country(teamDTO.getCountry())
